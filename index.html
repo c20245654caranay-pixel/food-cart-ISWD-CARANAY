@@ -1,98 +1,364 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- TODO: replace with your own page title -->
-    <title>Midterm Project</title>
+    <title>Yummy Bites | Food Cart</title>
 
-    <!-- ===== STARTER HEAD: keep these exact tags ===== -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
 
-        /* TODO (C2): define your palette tokens once, here */
+        @theme {
+            --color-primary: #f97316;
+            --color-secondary: #fef3c7;
+        }
 
-        /* TODO (A5): build your reusable component class here */
+        @layer components {
+            .btn-primary {
+                @apply rounded-lg bg-orange-500 px-6 py-3 font-semibold text-white transition hover:bg-orange-600;
+            }
+
+            .food-card {
+                @apply overflow-hidden rounded-xl bg-white shadow-md transition hover:-translate-y-2 dark:bg-gray-800;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: #f97316;
+            z-index: 100;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
     </style>
-    <!-- ===== END STARTER HEAD ===== -->
 </head>
 
-<body>
-    <!-- TODO (E2): style this empty div as your scroll progress bar, or replace it with your own scrub effect -->
+<body class="bg-orange-50 text-gray-800 dark:bg-gray-900 dark:text-white">
+
     <div id="progressBar"></div>
 
-    <header>
-        <nav>
-            <span>Your Name or Brand</span>
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#work">Work</a></li>
-                <li><a href="#contact">Contact</a></li>
+    <!-- NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-white shadow dark:bg-gray-800">
+
+        <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+
+            <h1 class="text-2xl font-bold text-orange-500">
+                🍔 Yummy Bites
+            </h1>
+
+            <ul class="hidden gap-6 font-medium md:flex">
+                <li><a href="#home" class="hover:text-orange-500">Home</a></li>
+                <li><a href="#about" class="hover:text-orange-500">About</a></li>
+                <li><a href="#menu" class="hover:text-orange-500">Menu</a></li>
+                <li><a href="#contact" class="hover:text-orange-500">Contact</a></li>
             </ul>
-            <button id="darkModeToggle" type="button">Toggle Dark Mode</button>
+
+            <button id="darkModeToggle"
+                class="rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-orange-600">
+                🌙
+            </button>
+
         </nav>
     </header>
 
     <main>
-        <!-- Hero: animated by your page-load timeline (D1), so it does not use the "reveal" class -->
-        <section id="hero">
-            <h1>Your Name or Brand</h1>
-            <p>One-line tagline about what you do.</p>
-            <a href="#contact">Get in touch</a>
-            <button id="replayBtn" type="button">Replay Intro</button>
-        </section>
 
-        <!-- Sections below the hero carry the "reveal" hook class for your ScrollTrigger loop (E1) -->
-        <section id="about" class="reveal">
-            <h2>About</h2>
-            <p>Write a short paragraph about yourself, your business, or your hobby. Replace this placeholder text.</p>
-        </section>
+        <!-- HOME SECTION -->
+        <section id="home" class="px-6 py-20">
 
-        <section id="work" class="reveal">
-            <h2>Work</h2>
-            <div>
-                <article>
-                    <h3>Project One</h3>
-                    <p>A short description of this project.</p>
-                </article>
-                <article>
-                    <h3>Project Two</h3>
-                    <p>A short description of this project.</p>
-                </article>
-                <article>
-                    <h3>Project Three</h3>
-                    <p>A short description of this project.</p>
-                </article>
+            <div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2">
+
+                <div class="hero-content">
+
+                    <h2 class="mb-5 text-5xl font-extrabold leading-tight">
+                        Delicious Food,
+                        <span class="text-orange-500">Happy Mood!</span>
+                    </h2>
+
+                    <p class="mb-7 text-lg text-gray-600 dark:text-gray-300">
+                        Enjoy delicious and affordable snacks and meals
+                        made fresh every day. Visit our food cart today!
+                    </p>
+
+                    <a href="#menu" class="btn-primary">
+                        View Our Menu
+                    </a>
+
+                    <button id="replayBtn"
+                        class="ml-3 text-sm font-semibold text-orange-500 underline">
+                        Replay Intro
+                    </button>
+
+                </div>
+
+                <div>
+                    <img
+                        src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800"
+                        alt="Delicious burger"
+                        class="h-80 w-full rounded-2xl object-cover shadow-lg"
+                    >
+                </div>
+
             </div>
         </section>
 
-        <section id="contact" class="reveal">
-            <h2>Contact</h2>
-            <form action="#">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
+        <!-- ABOUT SECTION -->
+        <section id="about" class="reveal bg-white px-6 py-20 dark:bg-gray-800">
 
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+            <div class="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2">
 
-                <label for="message">Message</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
+                <img
+                    src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800"
+                    alt="Freshly prepared food"
+                    class="h-80 w-full rounded-2xl object-cover shadow-lg"
+                >
 
-                <button type="submit">Send Message</button>
-            </form>
+                <div>
+
+                    <h2 class="mb-5 text-3xl font-bold text-orange-500">
+                        About Us
+                    </h2>
+
+                    <p class="mb-5 leading-8 text-gray-600 dark:text-gray-300">
+                        Welcome to Yummy Bites! We are a small food cart
+                        business that serves delicious, fresh, and affordable
+                        snacks and meals for everyone.
+                    </p>
+
+                    <p class="mb-6 leading-8 text-gray-600 dark:text-gray-300">
+                        Our mission is to provide quality food, friendly
+                        service, and a satisfying experience for every customer.
+                    </p>
+
+                    <a href="#menu" class="btn-primary">
+                        Explore Our Menu
+                    </a>
+
+                </div>
+
+            </div>
         </section>
+
+        <!-- MENU SECTION -->
+        <section id="menu" class="reveal px-6 py-20">
+
+            <div class="mx-auto max-w-6xl">
+
+                <div class="mb-12 text-center">
+
+                    <h2 class="text-3xl font-bold text-orange-500">
+                        Our Menu
+                    </h2>
+
+                    <p class="mt-3 text-gray-600 dark:text-gray-300">
+                        Delicious food at affordable prices!
+                    </p>
+
+                </div>
+
+                <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+                    <!-- BURGER -->
+                    <div class="food-card">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600"
+                            alt="Cheese Burger"
+                            class="h-48 w-full object-cover"
+                        >
+
+                        <div class="p-5">
+
+                            <h3 class="text-xl font-bold">Cheese Burger</h3>
+
+                            <p class="my-3 text-gray-500 dark:text-gray-300">
+                                Juicy burger with cheese and fresh vegetables.
+                            </p>
+
+                            <p class="mb-4 text-xl font-bold text-orange-500">
+                                ₱89
+                            </p>
+
+                            <a href="#contact" class="btn-primary block text-center">
+                                Order Now
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <!-- FRIES -->
+                    <div class="food-card">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600"
+                            alt="French Fries"
+                            class="h-48 w-full object-cover"
+                        >
+
+                        <div class="p-5">
+
+                            <h3 class="text-xl font-bold">French Fries</h3>
+
+                            <p class="my-3 text-gray-500 dark:text-gray-300">
+                                Crispy and golden french fries.
+                            </p>
+
+                            <p class="mb-4 text-xl font-bold text-orange-500">
+                                ₱49
+                            </p>
+
+                            <a href="#contact" class="btn-primary block text-center">
+                                Order Now
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <!-- HOTDOG -->
+                    <div class="food-card">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=600"
+                            alt="Hotdog Sandwich"
+                            class="h-48 w-full object-cover"
+                        >
+
+                        <div class="p-5">
+
+                            <h3 class="text-xl font-bold">Hotdog Sandwich</h3>
+
+                            <p class="my-3 text-gray-500 dark:text-gray-300">
+                                Tasty hotdog with delicious sauce.
+                            </p>
+
+                            <p class="mb-4 text-xl font-bold text-orange-500">
+                                ₱45
+                            </p>
+
+                            <a href="#contact" class="btn-primary block text-center">
+                                Order Now
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="reveal bg-white px-6 py-20 dark:bg-gray-800">
+
+            <div class="mx-auto max-w-4xl">
+
+                <div class="mb-10 text-center">
+
+                    <h2 class="text-3xl font-bold text-orange-500">
+                        Contact Us
+                    </h2>
+
+                    <p class="mt-3 text-gray-600 dark:text-gray-300">
+                        Have questions or want to order? Send us a message!
+                    </p>
+
+                </div>
+
+                <form action="#" class="mx-auto max-w-xl space-y-5">
+
+                    <div>
+                        <label for="name" class="mb-2 block font-semibold">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your name"
+                            required
+                            class="w-full rounded-lg border border-gray-300 bg-orange-50 p-3 outline-none focus:border-orange-500 dark:border-gray-600 dark:bg-gray-900"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="email" class="mb-2 block font-semibold">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required
+                            class="w-full rounded-lg border border-gray-300 bg-orange-50 p-3 outline-none focus:border-orange-500 dark:border-gray-600 dark:bg-gray-900"
+                        >
+                    </div>
+
+                    <div>
+                        <label for="message" class="mb-2 block font-semibold">
+                            Message
+                        </label>
+
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="4"
+                            placeholder="Write your message or order"
+                            required
+                            class="w-full rounded-lg border border-gray-300 bg-orange-50 p-3 outline-none focus:border-orange-500 dark:border-gray-600 dark:bg-gray-900"
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full">
+                        Send Message
+                    </button>
+
+                </form>
+
+            </div>
+        </section>
+
     </main>
 
-    <footer>
-        <p>&copy; 2026 Your Name or Brand</p>
+    <!-- FOOTER -->
+    <footer class="bg-orange-500 px-6 py-8 text-center text-white">
+
+        <h2 class="mb-2 text-2xl font-bold">
+            🍔 Yummy Bites
+        </h2>
+
+        <p>Delicious Food, Happy Mood!</p>
+
+        <p class="mt-4 text-sm">
+            © 2026 Yummy Bites. All Rights Reserved.
+        </p>
+
     </footer>
 
-    <!-- Load order matters: GSAP, then ScrollTrigger, then your own script -->
+    <!-- GSAP -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
-</body>
 
+</body>
 </html>
+
+
+
