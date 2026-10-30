@@ -1,190 +1,304 @@
 
-// =====================================================
-// MIDTERM PROJECT: script.js
-// =====================================================
+// =============================================
+// YUMMY BITES - FIXED JAVASCRIPT
+// DARK MODE + GSAP + SCROLLTRIGGER
+// =============================================
 
-gsap.registerPlugin(ScrollTrigger);
 
+// =============================================
+// B1: DARK MODE TOGGLE
+// =============================================
 
-// ---- B1: DARK MODE TOGGLE ----
-
-// Toggle the dark class on the HTML element
 const darkModeToggle = document.querySelector("#darkModeToggle");
+const htmlElement = document.documentElement;
 
-darkModeToggle.addEventListener("click", () => {
-    document.documentElement.classList.toggle("dark");
-});
+// Load saved theme
+function applyTheme(theme) {
 
+    const isDark = theme === "dark";
 
-// ---- D1 + D2: PAGE-LOAD INTRO TIMELINE ----
+    htmlElement.classList.toggle("dark", isDark);
 
-// Set initial animation states
-gsap.set(["nav", "h1", ".hero-content", ".hero-buttons"], {
-    opacity: 0,
-    y: 30
-});
+    if (darkModeToggle) {
+        darkModeToggle.textContent = isDark
+            ? "☀️ Light Mode"
+            : "🌙 Dark Mode";
 
-// Create ONE GSAP timeline with defaults
-const introTimeline = gsap.timeline({
-    defaults: {
-        duration: 0.7,
-        ease: "power2.out"
+        darkModeToggle.setAttribute(
+            "aria-label",
+            isDark ? "Switch to light mode" : "Switch to dark mode"
+        );
     }
-});
+}
 
-// Navigation animation
-// power2.out creates a smooth and natural stopping effect.
-introTimeline.to("nav", {
-    opacity: 1,
-    y: 0
-});
+// Check saved theme
+let savedTheme = "light";
 
-// Heading animation
-// back.out adds a slight bounce effect.
-introTimeline.to("h1", {
-    opacity: 1,
-    y: 0,
-    duration: 0.8,
-    ease: "back.out(1.7)"
-}, "-=0.3");
+try {
+    savedTheme = localStorage.getItem("yummyBitesTheme") || "light";
+} catch (error) {
+    console.warn("Theme storage is unavailable.");
+}
 
-// Hero content animation
-// power2.out makes the entrance smooth.
-introTimeline.to(".hero-content", {
-    opacity: 1,
-    y: 0
-}, "-=0.3");
+// Apply theme immediately
+applyTheme(savedTheme);
 
-// Hero buttons animation with stagger
-// power1.out gives the buttons a gentle finish.
-introTimeline.to(".hero-buttons", {
-    opacity: 1,
-    y: 0,
-    stagger: 0.15,
-    ease: "power1.out"
-}, "-=0.2");
+// Toggle theme when clicked
+if (darkModeToggle) {
 
+    darkModeToggle.addEventListener("click", () => {
 
-// ---- D3: CLICK INTERACTION ----
+        const isDark = htmlElement.classList.contains("dark");
 
-// Replay the intro timeline when clicked
-const replayBtn = document.querySelector("#replayBtn");
+        const newTheme = isDark ? "light" : "dark";
 
-replayBtn.addEventListener("click", () => {
-    introTimeline.restart();
-});
+        applyTheme(newTheme);
+
+        // Save theme
+        try {
+            localStorage.setItem("yummyBitesTheme", newTheme);
+        } catch (error) {
+            console.warn("Could not save theme.");
+        }
+
+    });
+
+}
 
 
-// ---- E1: SCROLL REVEALS ----
+// =============================================
+// GSAP AVAILABILITY CHECK
+// =============================================
 
-// ---- E2: SCROLL-LINKED EFFECT ----
+const gsapAvailable =
+    typeof gsap !== "undefined" &&
+    typeof ScrollTrigger !== "undefined";
 
-// ---- E3: REDUCED MOTION + CLEANUP ----
-
-// Use matchMedia to check reduced-motion preferences
-const mm = gsap.matchMedia();
-
-mm.add(
-    {
-        reduceMotion: "(prefers-reduced-motion: reduce)",
-        noPreference: "(prefers-reduced-motion: no-preference)"
-    },
-    (context) => {
-
-        const { reduceMotion } = context.conditions;
+const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+).matches;
 
 
-        // E1: REVEAL EVERY ELEMENT WITH ITS OWN SCROLLTRIGGER
+// If GSAP is unavailable or reduced motion is enabled,
+// show all content without animations.
 
-        document.querySelectorAll(".reveal").forEach((element) => {
+if (!gsapAvailable || reduceMotion) {
 
-            if (reduceMotion) {
+    document.querySelectorAll(".reveal").forEach(section => {
+        section.style.opacity = "1";
+        section.style.transform = "none";
+    });
 
-                // Show elements immediately for reduced-motion users
-                gsap.set(element, {
-                    opacity: 1,
-                    y: 0
-                });
+    document.querySelectorAll(".food-card").forEach(card => {
+        card.style.opacity = "1";
+        card.style.transform = "none";
+    });
 
-            } else {
+    document.querySelectorAll(
+        "#heroBadge, #heroTitle, #heroText, #heroButtons a, #heroImage, #replayBtn"
+    ).forEach(element => {
+        element.style.opacity = "1";
+        element.style.transform = "none";
+    });
 
-                gsap.fromTo(element,
+} else {
 
-                    {
-                        opacity: 0,
-                        y: 50
-                    },
+    // Register ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
 
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        ease: "power2.out",
 
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 85%",
-                            toggleActions: "play none none reverse"
-                        }
-                    }
+    // =============================================
+    // D1 + D2: HERO INTRO TIMELINE
+    // =============================================
 
-                );
+    const intro = gsap.timeline({
+        paused: true,
 
-            }
+        defaults: {
+            duration: 0.7,
+            ease: "power3.out"
+        }
+    });
 
+    intro
+
+        // Step 1: Badge
+        .from("#heroBadge", {
+            y: -30,
+            opacity: 0,
+            duration: 0.5
+        })
+
+        // Step 2: Heading
+        .from("#heroTitle", {
+            y: 60,
+            opacity: 0,
+            scale: 0.9
+        }, "-=0.2")
+
+        // Step 3: Paragraph
+        .from("#heroText", {
+            y: 30,
+            opacity: 0
+        }, "-=0.3")
+
+        // Step 4: Buttons with stagger
+        .from("#heroButtons a", {
+            y: 30,
+            opacity: 0,
+            stagger: 0.2
+        }, "-=0.3")
+
+        // Step 5: Hero image
+        .from("#heroImage", {
+            x: 60,
+            opacity: 0,
+            scale: 0.9
+        }, "-=0.4")
+
+        // Step 6: Replay button
+        .from("#replayBtn", {
+            y: 20,
+            opacity: 0,
+            duration: 0.4
+        }, "-=0.2");
+
+
+    // Play intro
+    intro.play();
+
+
+    // =============================================
+    // D3: REPLAY INTRO BUTTON
+    // =============================================
+
+    const replayBtn = document.querySelector("#replayBtn");
+
+    if (replayBtn) {
+
+        replayBtn.addEventListener("click", () => {
+            intro.restart();
         });
 
+    }
 
-        // E2: SCROLL PROGRESS BAR WITH SCRUB
 
-        const progressBar = document.querySelector("#progressBar");
+    // =============================================
+    // E1: SCROLL REVEAL ANIMATION
+    // =============================================
 
-        if (progressBar) {
+    const revealSections = gsap.utils.toArray(".reveal");
 
-            if (reduceMotion) {
+    revealSections.forEach((section) => {
 
-                // Show completed progress without scroll animation
-                gsap.set(progressBar, {
-                    scaleX: 1,
-                    transformOrigin: "left center"
-                });
+        gsap.fromTo(
+            section,
 
-            } else {
+            {
+                y: 40,
+                opacity: 0
+            },
 
-                gsap.fromTo(progressBar,
+            {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                ease: "power2.out",
 
-                    {
-                        scaleX: 0
-                    },
-
-                    {
-                        scaleX: 1,
-                        ease: "none",
-
-                        scrollTrigger: {
-                            trigger: document.documentElement,
-                            start: "top top",
-                            end: "bottom bottom",
-                            scrub: true
-                        }
-                    }
-
-                );
-
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
             }
+        );
+
+    });
+
+
+    // =============================================
+    // E2: SCROLL PROGRESS BAR
+    // =============================================
+
+    gsap.to("#progressBar", {
+
+        width: "100%",
+
+        ease: "none",
+
+        scrollTrigger: {
+            trigger: document.documentElement,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.3
+        }
+
+    });
+
+
+    // =============================================
+    // E3: FOOD CARD ANIMATION
+    // =============================================
+
+    gsap.from(".food-card", {
+
+        y: 40,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.15,
+        ease: "power2.out",
+
+        scrollTrigger: {
+            trigger: "#menu",
+            start: "top 75%",
+            toggleActions: "play none none reverse"
+        }
+
+    });
+
+
+    // Refresh ScrollTrigger
+    window.addEventListener("load", () => {
+        ScrollTrigger.refresh();
+    });
+
+}
+
+
+// =============================================
+// CONTACT FORM
+// FRONT-END DEMONSTRATION
+// =============================================
+
+const contactForm = document.querySelector("#contactForm");
+const formStatus = document.querySelector("#formStatus");
+
+if (contactForm) {
+
+    contactForm.addEventListener("submit", (event) => {
+
+        event.preventDefault();
+
+        const name = document.querySelector("#name").value.trim();
+
+        if (formStatus) {
+
+            formStatus.textContent =
+                `Thank you, ${name}! Your message has been received in this demo.`;
+
+            formStatus.className =
+                "text-center text-sm font-semibold text-orange-500 mt-4";
 
         }
 
-    }
-);
+        contactForm.reset();
+
+    });
+
+}
 
 
-// Refresh ScrollTrigger after page loads
-window.addEventListener("load", () => {
-    ScrollTrigger.refresh();
-});
+// =============================================
+// END OF YUMMY BITES JAVASCRIPT
+// =============================================
 
-
-// =====================================================
-// END OF MIDTERM PROJECT SCRIPT
-// =====================================================
