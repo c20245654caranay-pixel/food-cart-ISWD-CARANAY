@@ -1,211 +1,98 @@
-
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio | Nelsie Caranay</title>
+    <!-- TODO: replace with your own page title -->
+    <title>Midterm Project</title>
 
     <!-- ===== STARTER HEAD: keep these exact tags ===== -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
     <style type="text/tailwindcss">
         @custom-variant dark (&:where(.dark, .dark *));
 
-        /* C2: Palette tokens */
-        @theme {
-            --color-brand: #c2410c;
-            --color-brand-light: #ffedd5;
-            --color-page: #fff7ed;
-            --color-dark-page: #111827;
-        }
+        /* TODO (C2): define your palette tokens once, here */
 
-        /* A5: Reusable component class */
-        @layer components {
-            .btn-primary {
-                @apply inline-block rounded-lg bg-orange-700 px-5 py-3 font-semibold text-white transition hover:bg-orange-800 focus:outline-2 focus:outline-offset-2 focus:outline-orange-500 dark:bg-orange-500 dark:text-gray-950 dark:hover:bg-orange-400;
-            }
-
-            .project-card {
-                @apply rounded-xl border border-orange-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-800;
-            }
-
-            .form-field {
-                @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-orange-600 focus:ring-2 focus:ring-orange-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:ring-orange-900;
-            }
-        }
+        /* TODO (A5): build your reusable component class here */
     </style>
     <!-- ===== END STARTER HEAD ===== -->
 </head>
 
-<body class="min-h-screen bg-orange-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+<body>
+    <!-- TODO (E2): style this empty div as your scroll progress bar, or replace it with your own scrub effect -->
+    <div id="progressBar"></div>
 
-    <!-- E2: Scroll progress bar -->
-    <div
-        id="progressBar"
-        class="fixed left-0 top-0 z-50 h-1 w-full origin-left scale-x-0 bg-orange-600"
-        aria-hidden="true">
-    </div>
-
-    <!-- Header -->
-    <header class="sticky top-0 z-40 border-b border-orange-200 bg-orange-50/95 backdrop-blur dark:border-gray-700 dark:bg-gray-900/95">
-        <nav class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-4">
-            <a href="#hero" class="text-xl font-bold text-orange-800 dark:text-orange-300">
-                Nelsie Caranay
-            </a>
-
-            <ul class="flex flex-wrap items-center gap-5 text-sm font-medium">
-                <li><a class="hover:text-orange-700 dark:hover:text-orange-300" href="#about">About</a></li>
-                <li><a class="hover:text-orange-700 dark:hover:text-orange-300" href="#work">Work</a></li>
-                <li><a class="hover:text-orange-700 dark:hover:text-orange-300" href="#contact">Contact</a></li>
+    <header>
+        <nav>
+            <span>Your Name or Brand</span>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-
-            <button
-                id="darkModeToggle"
-                type="button"
-                class="rounded-lg border border-orange-300 px-4 py-2 text-sm font-semibold hover:bg-orange-100 dark:border-gray-600 dark:hover:bg-gray-800">
-                ☀️ Light Mode
-            </button>
+            <button id="darkModeToggle" type="button">Toggle Dark Mode</button>
         </nav>
     </header>
 
-    <main class="mx-auto max-w-6xl px-6">
-
-        <!-- Hero: animated by the page-load GSAP timeline -->
-        <section id="hero" class="flex min-h-[75vh] flex-col justify-center py-20">
-            <p class="mb-4 font-semibold uppercase tracking-[0.2em] text-orange-700 dark:text-orange-300">
-                Welcome to my portfolio
-            </p>
-
-            <h1 class="max-w-3xl text-4xl font-extrabold leading-tight sm:text-6xl">
-                Hi, I'm <span class="text-orange-700 dark:text-orange-300">Nelsie.</span>
-            </h1>
-
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-300">
-                I'm a student learning web development and creating simple,
-                creative, and useful websites.
-            </p>
-
-            <div class="mt-8 flex flex-wrap gap-3">
-                <a href="#contact" class="btn-primary">Get in touch</a>
-
-                <button
-                    id="replayBtn"
-                    type="button"
-                    class="rounded-lg border border-orange-300 px-5 py-3 font-semibold transition hover:bg-orange-100 dark:border-gray-600 dark:hover:bg-gray-800">
-                    Replay Intro
-                </button>
-            </div>
+    <main>
+        <!-- Hero: animated by your page-load timeline (D1), so it does not use the "reveal" class -->
+        <section id="hero">
+            <h1>Your Name or Brand</h1>
+            <p>One-line tagline about what you do.</p>
+            <a href="#contact">Get in touch</a>
+            <button id="replayBtn" type="button">Replay Intro</button>
         </section>
 
-        <!-- About -->
-        <section id="about" class="reveal scroll-mt-24 py-16">
-            <h2 class="text-3xl font-bold">About Me</h2>
-
-            <p class="mt-5 max-w-3xl leading-8 text-gray-600 dark:text-gray-300">
-                I am a student interested in web design and development. I enjoy
-                learning HTML, Tailwind CSS, and JavaScript, and I am working
-                toward building websites that look good and are easy to use.
-            </p>
+        <!-- Sections below the hero carry the "reveal" hook class for your ScrollTrigger loop (E1) -->
+        <section id="about" class="reveal">
+            <h2>About</h2>
+            <p>Write a short paragraph about yourself, your business, or your hobby. Replace this placeholder text.</p>
         </section>
 
-        <!-- Work -->
-        <section id="work" class="reveal scroll-mt-24 py-16">
-            <h2 class="text-3xl font-bold">My Work</h2>
-
-            <p class="mt-3 text-gray-600 dark:text-gray-300">
-                Here are a few projects and ideas I have worked on.
-            </p>
-
-            <div class="mt-8 grid gap-6 md:grid-cols-3">
-                <article class="project-card">
-                    <span class="text-sm font-semibold text-orange-700 dark:text-orange-300">
-                        Project 01
-                    </span>
-                    <h3 class="mt-3 text-xl font-bold">Portfolio Website</h3>
-                    <p class="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                        A personal website showcasing my skills, projects, and contact information.
-                    </p>
+        <section id="work" class="reveal">
+            <h2>Work</h2>
+            <div>
+                <article>
+                    <h3>Project One</h3>
+                    <p>A short description of this project.</p>
                 </article>
-
-                <article class="project-card">
-                    <span class="text-sm font-semibold text-orange-700 dark:text-orange-300">
-                        Project 02
-                    </span>
-                    <h3 class="mt-3 text-xl font-bold">Crave Cart</h3>
-                    <p class="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                        A food cart website concept with menu items and a simple ordering demo.
-                    </p>
+                <article>
+                    <h3>Project Two</h3>
+                    <p>A short description of this project.</p>
                 </article>
-
-                <article class="project-card">
-                    <span class="text-sm font-semibold text-orange-700 dark:text-orange-300">
-                        Project 03
-                    </span>
-                    <h3 class="mt-3 text-xl font-bold">Database Design</h3>
-                    <p class="mt-3 leading-7 text-gray-600 dark:text-gray-300">
-                        A database project focused on organizing information into related tables.
-                    </p>
+                <article>
+                    <h3>Project Three</h3>
+                    <p>A short description of this project.</p>
                 </article>
             </div>
         </section>
 
-        <!-- Contact -->
-        <section id="contact" class="reveal scroll-mt-24 py-16">
-            <h2 class="text-3xl font-bold">Contact Me</h2>
+        <section id="contact" class="reveal">
+            <h2>Contact</h2>
+            <form action="#">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
 
-            <p class="mt-3 text-gray-600 dark:text-gray-300">
-                Send me a message using the form below.
-            </p>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
 
-            <form action="#" method="post" class="mt-8 grid max-w-xl gap-5">
-                <div>
-                    <label for="name" class="mb-2 block font-semibold">Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        autocomplete="name"
-                        class="form-field"
-                        required>
-                </div>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
 
-                <div>
-                    <label for="email" class="mb-2 block font-semibold">Email</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        autocomplete="email"
-                        class="form-field"
-                        required>
-                </div>
-
-                <div>
-                    <label for="message" class="mb-2 block font-semibold">Message</label>
-                    <textarea
-                        id="message"
-                        name="message"
-                        rows="5"
-                        class="form-field"
-                        required></textarea>
-                </div>
-
-                <button type="submit" class="btn-primary w-fit">
-                    Send Message
-                </button>
+                <button type="submit">Send Message</button>
             </form>
         </section>
     </main>
 
-    <footer class="mt-12 border-t border-orange-200 px-6 py-8 text-center text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
-        <p>&copy; 2026 Nelsie Caranay. All rights reserved.</p>
+    <footer>
+        <p>&copy; 2026 Your Name or Brand</p>
     </footer>
 
-    <!-- Load order: GSAP, ScrollTrigger, then your script -->
+    <!-- Load order matters: GSAP, then ScrollTrigger, then your own script -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
